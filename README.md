@@ -171,28 +171,6 @@ uv run --no-sync python preprocess/fp_pred_main.py \
   --num-workers 8
 ```
 
-### Runtime settings and outputs
-
-`--num-workers` controls CPU processes for subformula assignment;
-`--batch-size` controls fingerprint inference batches. Limit BLAS/OpenMP threads
-before starting Python, as shown above. Without these limits, 32 workers can
-each create 64 OpenBLAS threads, causing excessive CPU scheduling, high system
-CPU usage, and slow interactive sessions. Start with 8 workers and adjust to
-the available CPU resources. Lowering the inference batch size does not address
-oversubscription during subformula assignment.
-
-`--device cuda:0` means the first GPU visible through `CUDA_VISIBLE_DEVICES`,
-which may differ from physical GPU 0. The command first assigns subformulae on
-CPU, then predicts fingerprints on the selected device. Subformula assignment
-currently collects all results before writing JSON files, so an empty output
-directory during that stage does not indicate that the process has stopped.
-There is no per-spectrum progress counter during the parallel computation.
-
-Subformula JSON files are written under `<res-dir>/subforms_fp/`. The script
-writes five `<dataset-name>_fps_selfies_threshold_<threshold>.tsv` files to
-`--output-dir`, using thresholds `0.1`, `0.2`, `0.3`, `0.4`, and `0.5`.
-Run `uv run --no-sync python preprocess/fp_pred_main.py --help` for all options.
-
 ### Train, validation, and test splits
 
 Preserve the original MassSpecGym `fold` assignments. Apply the adduct filter
@@ -210,12 +188,6 @@ accepts only its supported adduct list, and fingerprint/SELFIES processing drops
 records without predictions or with failed SELFIES conversion; "all adducts"
 does not imply that every raw record survives preprocessing. For CANOPUS,
 preserve the supplied `split` assignments.
-
-**Current limitation:** `preprocess/prepare_test_data.py` still hardcodes
-`MassSpecGymL` and only filters by fold. It must be updated to read the generated
-TSV, use `fold` for MassSpecGym, and apply the training-only `[M+H]+` filter before
-it can implement the split policy above. It does not currently expose command-line
-arguments. Do not treat it as a ready-to-run continuation of the examples above.
 
 The intended generated-data layout is shown below; `train/`, `val/`, and `test/`
 are produced by the splitting step, not by fingerprint prediction:
