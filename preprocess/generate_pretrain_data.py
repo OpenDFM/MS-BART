@@ -7,6 +7,7 @@ from tqdm import tqdm
 from rdkit import Chem
 from pebble import ProcessPool
 from concurrent.futures import TimeoutError
+from pathlib import Path
 
 
 RDLogger.DisableLog('rdApp.*')
@@ -49,6 +50,7 @@ def process_single_smiles(smile):
     return {'fps': fps, 'selfies': selfies}
 
 def process_smiles_file(input_file, output_file):
+    Path(output_file).parent.mkdir(parents=True, exist_ok=True)
     df = pd.read_csv(input_file, sep='\t', engine='pyarrow')
     if 'smiles' not in df.columns:
         raise ValueError("Input file must contain a 'smiles' column")    
@@ -91,6 +93,6 @@ if __name__ == '__main__':
     print(get_morgan_4096(smile))
     print(get_selfies(smile))
     process_smiles_file(
-        "MassSpecGym/data/molecules/candidate_pools/MassSpecGym_retrieval_molecules_pubchem_4M.tsv",
+        "data/MassSpecGym/data/molecules/MassSpecGym_molecules_MCES2_disjoint_with_test_fold_4M.tsv",
         "logs/datasets/MassSpecGym/MassSpecGym_fps_selfies_pretrain_4M.tsv"
     )

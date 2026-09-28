@@ -1,4 +1,8 @@
 slurms
+data/canopus_train_export
+data/MassSpecGym
+data/frigid_pretrained_checkpoints
+logs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -97,10 +101,8 @@ ipython_config.py
 #Pipfile.lock
 
 # UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
+# Keep index-specific lockfiles local so developers can use their own PyPI mirrors.
+uv.lock
 
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.

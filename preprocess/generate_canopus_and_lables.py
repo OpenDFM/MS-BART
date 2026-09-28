@@ -116,8 +116,8 @@ if __name__ == "__main__":
 
     # ==================== Merge the original data ====================
     # https://github.com/coleygroup/DiffMS/blob/6c6924f10cdbfa4badd10ed8fecede649c7ddcdc/data_processing/build_fp2mol_datasets.py#L73
-    canopus_split = pd.read_csv('./logs/datasets/CANOPUS/splits/canopus_hplus_100_0.tsv', sep='\t')
-    canopus_labels = pd.read_csv('./logs/datasets/CANOPUS/labels.tsv', sep='\t')
+    canopus_split = pd.read_csv('./data/canopus_train_export/splits/canopus_hplus_100_0.tsv', sep='\t')
+    canopus_labels = pd.read_csv('./data/canopus_train_export/labels.tsv', sep='\t')
     canopus_labels["name"] = canopus_labels["spec"]
     df = canopus_labels.merge(canopus_split, on="name")
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         # ==================== Construct MGF metadata ====================
         adduct = row["ionization"]
         if adduct not in ION_LST: continue
-        meta_data, spectras = parse_spectra(os.path.join("logs/datasets/CANOPUS/spec_files", row["name"]+".ms"))
+        meta_data, spectras = parse_spectra(os.path.join("data/canopus_train_export/spec_files", row["name"]+".ms"))
         meta = {
             "FEATURE_ID": row["name"],
             "adduct": row["ionization"],
@@ -168,6 +168,7 @@ if __name__ == "__main__":
     
     # ==================== Generate MGF file content ====================
     mgf_output = build_mgf_str(meta_spec_list)
+    Path("logs/datasets/CANOPUS").mkdir(parents=True, exist_ok=True)
     with open(f"logs/datasets/CANOPUS/CANOPUS.mgf", "w") as f:
         f.write(mgf_output)
 

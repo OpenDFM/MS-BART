@@ -13,8 +13,8 @@ ulimit -c 0
 
 MODEL_NAME_OR_PATH=facebook/bart-base
 TOKENIZER_NAME=./data/tokenizer/selfies-fps-tokenizer
-PRETRAIN_FILE=./data/MassSpecGym/pretrain-data/train/train.tsv # NPLIB1
-VAL_FILE=./data/MassSpecGym/pretrain-data/val/val.tsv
+PRETRAIN_FILE=./logs/datasets/MassSpecGym/pubchem-4M/train.tsv
+VAL_FILE=./logs/datasets/MassSpecGym/pubchem-4M/val.tsv
 SAVE_NAME=pretrained-model
 PORT=8668
 SAVE_STEPS=1000

@@ -108,7 +108,7 @@ def parse_spectra_mgf(
         return parsed_spectra
 
 if __name__ == "__main__":
-    df = pd.read_csv(f"MassSpecGym/data/MassSpecGym.tsv", sep="\t")
+    df = pd.read_csv(f"data/MassSpecGym/data/MassSpecGym.tsv", sep="\t")
     only_MH = False
     if only_MH:
         save_dir = "MassSpecGym"
@@ -164,6 +164,7 @@ if __name__ == "__main__":
     
     # ==================== Generate MGF file content ====================
     mgf_output = build_mgf_str(meta_spec_list)
+    Path(f"logs/datasets/{save_dir}").mkdir(parents=True, exist_ok=True)
     with open(f"logs/datasets/{save_dir}/{save_dir}.mgf", "w") as f:
         f.write(mgf_output)
 

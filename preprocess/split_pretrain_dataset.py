@@ -2,6 +2,7 @@ from datasets import load_dataset, DatasetDict
 from collections import defaultdict
 import pandas as pd
 from datasets import DatasetDict
+from pathlib import Path
 
 def split_pubchem_data():
     # Configuration
@@ -16,6 +17,7 @@ def split_pubchem_data():
     
     validation_file = f"logs/datasets/MassSpecGym/pubchem-4M/val.tsv"
     train_file = f"logs/datasets/MassSpecGym/pubchem-4M/train.tsv"
+    Path(train_file).parent.mkdir(parents=True, exist_ok=True)
     
     validation_set.to_csv(validation_file, sep='\t', index=False)
     train_set.to_csv(train_file, sep='\t', index=False)
