@@ -11,7 +11,7 @@
 
 ulimit -c 0
 
-MODEL_PATH=data/checkpoints/msg-lr5e-5-cand-margin-0.1-rank-weight5-penalty1.4
+MODEL_PATH=./log/msg-lr5e-5-cand-margin-0.1-rank-weight5-penalty1.4
 NUM_BEAM=100
 PORT=29400
 

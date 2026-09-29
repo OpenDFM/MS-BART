@@ -189,6 +189,20 @@ records without predictions or with failed SELFIES conversion; "all adducts"
 does not imply that every raw record survives preprocessing. For CANOPUS,
 preserve the supplied `split` assignments.
 
+Split the generated MassSpecGym fingerprint table at threshold `0.2`:
+
+```bash
+uv run --no-sync python preprocess/prepare_test_data.py \
+  --dataset-name MassSpecGym \
+  --threshold 0.2
+```
+
+These are the defaults when no arguments are supplied. Use `--dataset-name CANOPUS`
+for CANOPUS or `--data-dir PATH` to override the input directory, which defaults to
+`logs/datasets/<dataset-name>`. Outputs are written to `train/`, `val/`, and `test/`
+under that directory. `--threshold` selects an existing fingerprint TSV; it does
+not recompute fingerprints.
+
 The intended generated-data layout is shown below; `train/`, `val/`, and `test/`
 are produced by the splitting step, not by fingerprint prediction:
 
@@ -217,6 +231,16 @@ logs/datasets/
 ```
 
 ## Step1: Unified Multi-Task Pretraining on Reliably Computed Fingerprints
+
+The pretraining script loads the unified SELFIES/fingerprint tokenizer from
+`./ms-bart-tokenizer`.
+The SELFIES token vocabulary comes from
+[`moldata/vocab_list/zinc.npy`](https://github.com/zjunlp/MolGen/blob/main/moldata/vocab_list/zinc.npy)
+in MolGen (ICLR 2024).
+
+Pretraining saves checkpoints to `./log/pretrained-model`. Finetuning and alignment
+save to `./log/<run-name>`, and downstream scripts load checkpoints from these
+directories.
 
 ```bash
 bash scripts/pretrain.sh
@@ -256,9 +280,8 @@ bash scripts/canopus/align.sh
 Check the evaluation paths against the selected split and trained checkpoint
 before launching. The current MSG evaluation script has a CANOPUS filename in
 its test path and uses `NUM_BEAMS` although it defines `NUM_BEAM`. The CANOPUS
-evaluation script reads from `data/CANOPUS/`, and its checkpoint directory name
-differs from the alignment script's output name. These script settings need to
-be corrected for the generated-data workflow; the entry points are:
+evaluation script reads from `data/CANOPUS/`. These data-path and MSG beam settings
+need to be corrected for the generated-data workflow; the entry points are:
 
 ```bash
 bash scripts/msg/eval.sh

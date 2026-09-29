@@ -8,8 +8,8 @@ NUM_GENERATION=3
 
 
 
-MODEL_NAME_OR_PATH=./data/checkpoints/canopus-bart-base-selfies-pretrain-4M-ft
-TOKENIZER_NAME=./data/checkpoints/canopus-bart-base-selfies-pretrain-4M-ft
+MODEL_NAME_OR_PATH=./log/canopus-bart-base-selfies-pretrain-4M-ft
+TOKENIZER_NAME=./log/canopus-bart-base-selfies-pretrain-4M-ft
 FINETUNE_PATH=logs/datasets/CANOPUS/train/CANOPUS_fps_selfies_threshold_0.2.tsv
 VAL_PATH=logs/datasets/CANOPUS/val/CANOPUS_fps_selfies_threshold_0.2.tsv
 SAVE_NAME=canopus-lr$LR-cand-margin-$CAND_MARGIN-rank-weight$RANK_WEIGHT-penalty$LENGTH_PENALTY-gen$NUM_GENERATION
@@ -46,7 +46,7 @@ torchrun --nproc_per_node 4 --master_port $PORT src/rank_rl/main_trainer.py \
     --save_total_limit 2 \
     --report_to wandb \
     --run_name ms-$SAVE_NAME \
-    --output_dir ./data/checkpoints/$SAVE_NAME \
+    --output_dir ./log/$SAVE_NAME \
     --gradient_accumulation_steps 2 \
     --per_device_train_batch_size 16 \
     --per_device_eval_batch_size 32 \

@@ -12,8 +12,8 @@
 
 ulimit -c 0
 
-MODEL_NAME_OR_PATH=./data/pretrained-model
-TOKENIZER_NAME=./data/pretrained-model
+MODEL_NAME_OR_PATH=./log/pretrained-model
+TOKENIZER_NAME=./log/pretrained-model
 TRAIN_FILE=logs/datasets/CANOPUS/train/CANOPUS_fps_selfies_threshold_0.2.tsv
 VALIDATION_FILE=logs/datasets/CANOPUS/val/CANOPUS_fps_selfies_threshold_0.2.tsv
 SAVE_NAME=canopus-bart-base-selfies-pretrain-4M-ft
@@ -48,7 +48,7 @@ torchrun --nproc_per_node 1 --master_port $PORT src/ms_token/main_trainer.py \
     --save_total_limit 2 \
     --report_to wandb \
     --run_name ms_$SAVE_NAME \
-    --output_dir ./data/checkpoints/$SAVE_NAME \
+    --output_dir ./log/$SAVE_NAME \
     --gradient_accumulation_steps 2 \
     --per_device_train_batch_size 64 \
     --per_device_eval_batch_size 64 \

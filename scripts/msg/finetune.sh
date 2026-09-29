@@ -12,7 +12,7 @@
 ulimit -c 0
 
 
-MODEL_NAME_OR_PATH=./data/pretrained-model
+MODEL_NAME_OR_PATH=./log/pretrained-model
 TRAIN_FILE=./data/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.11.tsv
 VALIDATION_FILE=./data/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.11.tsv
 SAVE_NAME=msg-bart-base-selfies-pretrain-4M-ft
@@ -47,7 +47,7 @@ torchrun --nproc_per_node 2 --master_port $PORT src/ms_token/main_trainer.py \
     --save_total_limit 2 \
     --report_to wandb \
     --run_name ms_$SAVE_NAME \
-    --output_dir data/checkpoints/$SAVE_NAME \
+    --output_dir ./log/$SAVE_NAME \
     --gradient_accumulation_steps 1 \
     --per_device_train_batch_size 64 \
     --per_device_eval_batch_size 64 \
