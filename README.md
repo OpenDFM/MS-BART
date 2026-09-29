@@ -289,6 +289,19 @@ bash scripts/msg/eval.sh
 bash scripts/canopus/eval.sh
 ```
 
+## Citation
+
+```bibtex
+@article{han2026ms,
+  title={Ms-bart: Unified modeling of mass spectra and molecules for structure elucidation},
+  author={Han, Yang and Wang, Pengyu and Yu, Kai and Chen, Lu and others},
+  journal={Advances in Neural Information Processing Systems},
+  volume={38},
+  pages={111459--111481},
+  year={2026}
+}
+```
+
 ## Contact
 
 If you have any questions, please reach out to csyanghan@sjtu.edu.cn
