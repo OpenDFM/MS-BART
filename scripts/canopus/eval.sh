@@ -12,7 +12,7 @@
 
 ulimit -c 0
 
-MODEL_PATH=./log/canopus-lr5e-5-cand-margin-0.2-rank-weight5-penalty1.4-gen3
+MODEL_PATH=./logs/canopus-lr5e-5-cand-margin-0.2-rank-weight5-penalty1.4-gen3
 NUM_BEAM=100
 TEMPERATURE=0.4
 PORT=29400

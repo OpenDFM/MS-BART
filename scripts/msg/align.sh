@@ -18,8 +18,8 @@ echo "Running Task with LR=$LR, MARGIN=$CAND_MARGIN, WEIGHT=$RANK_WEIGHT, PENALT
 ulimit -c 0
 
 
-MODEL_NAME_OR_PATH=./log/msg-bart-base-selfies-pretrain-4M-ft
-TOKENIZER_NAME=./log/msg-bart-base-selfies-pretrain-4M-ft
+MODEL_NAME_OR_PATH=./logs/msg-bart-base-selfies-pretrain-4M-ft
+TOKENIZER_NAME=./logs/msg-bart-base-selfies-pretrain-4M-ft
 FINETUNE_PATH=./data/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.11.tsv
 VAL_PATH=./data/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.11.tsv
 SAVE_NAME=msg-lr$LR-cand-margin-$CAND_MARGIN-rank-weight$RANK_WEIGHT-penalty$LENGTH_PENALTY
@@ -57,7 +57,7 @@ torchrun --nproc_per_node 2 --master_port $PORT src/rank_rl/main_trainer.py \
     --save_total_limit 2 \
     --report_to wandb \
     --run_name ms-$SAVE_NAME \
-    --output_dir ./log/$SAVE_NAME \
+    --output_dir ./logs/$SAVE_NAME \
     --gradient_accumulation_steps 1 \
     --per_device_train_batch_size 64 \
     --per_device_eval_batch_size 64 \

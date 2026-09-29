@@ -238,8 +238,8 @@ The SELFIES token vocabulary comes from
 [`moldata/vocab_list/zinc.npy`](https://github.com/zjunlp/MolGen/blob/main/moldata/vocab_list/zinc.npy)
 in MolGen (ICLR 2024).
 
-Pretraining saves checkpoints to `./log/pretrained-model`. Finetuning and alignment
-save to `./log/<run-name>`, and downstream scripts load checkpoints from these
+Pretraining saves checkpoints to `./logs/pretrained-model`. Finetuning and alignment
+save to `./logs/<run-name>`, and downstream scripts load checkpoints from these
 directories.
 
 ```bash

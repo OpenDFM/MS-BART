@@ -7,6 +7,7 @@ dependencies = [
     "cairosvg==2.7.1",
     "datasets==3.3.2",
     "h5py==3.12.1",
+    "importlib-metadata==8.7.1",
     "jsonlines==4.0.0",
     "matchms==0.8.1",
     "matplotlib==3.9.2",

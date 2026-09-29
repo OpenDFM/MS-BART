@@ -47,7 +47,7 @@ torchrun --nproc_per_node 4 --master_port $PORT src/bart_pretrain_selfies_tokeni
     --save_total_limit 3 \
     --report_to wandb \
     --run_name ms_$SAVE_NAME \
-    --output_dir ./log/$SAVE_NAME \
+    --output_dir ./logs/$SAVE_NAME \
     --max_seq_length 512 \
     --gradient_accumulation_steps 2 \
     --per_device_train_batch_size 96 \
