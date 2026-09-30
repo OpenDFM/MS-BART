@@ -2,7 +2,7 @@
 #SBATCH --job-name=bart-base-selfies-pretrain-4M-ft-rank
 #SBATCH --partition=gpu_debug
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 #SBATCH --time=20:00:00
 #SBATCH --ntasks-per-node=8
 #SBATCH --mem=400G
@@ -20,8 +20,8 @@ ulimit -c 0
 
 MODEL_NAME_OR_PATH=./logs/msg-bart-base-selfies-pretrain-4M-ft
 TOKENIZER_NAME=./logs/msg-bart-base-selfies-pretrain-4M-ft
-FINETUNE_PATH=./data/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.11.tsv
-VAL_PATH=./data/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.11.tsv
+FINETUNE_PATH=./logs/datasets/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.2.tsv
+VAL_PATH=./logs/datasets/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.2.tsv
 SAVE_NAME=msg-lr$LR-cand-margin-$CAND_MARGIN-rank-weight$RANK_WEIGHT-penalty$LENGTH_PENALTY
 PORT=$((9669 + SLURM_ARRAY_TASK_ID))
 SAVE_STEPS=400
@@ -37,7 +37,7 @@ export WANDB_PROJECT="nips2025"
 export WANDB_MODE="offline"
 
 
-torchrun --nproc_per_node 2 --master_port $PORT src/rank_rl/main_trainer.py \
+torchrun --nproc_per_node 4 --master_port $PORT src/rank_rl/main_trainer.py \
     --model_name_or_path $MODEL_NAME_OR_PATH \
     --tokenizer_name $TOKENIZER_NAME \
     --do_train \
@@ -58,9 +58,9 @@ torchrun --nproc_per_node 2 --master_port $PORT src/rank_rl/main_trainer.py \
     --report_to wandb \
     --run_name ms-$SAVE_NAME \
     --output_dir ./logs/$SAVE_NAME \
-    --gradient_accumulation_steps 1 \
-    --per_device_train_batch_size 64 \
-    --per_device_eval_batch_size 64 \
+    --gradient_accumulation_steps 2 \
+    --per_device_train_batch_size 16 \
+    --per_device_eval_batch_size 32 \
     --predict_with_generate \
     --max_source_length 256 \
     --save_safetensors False \

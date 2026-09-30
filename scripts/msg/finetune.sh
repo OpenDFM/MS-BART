@@ -13,8 +13,8 @@ ulimit -c 0
 
 
 MODEL_NAME_OR_PATH=./logs/pretrained-model
-TRAIN_FILE=./data/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.11.tsv
-VALIDATION_FILE=./data/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.11.tsv
+TRAIN_FILE=./logs/datasets/MassSpecGym/train/MassSpecGym_fps_selfies_threshold_0.2.tsv
+VALIDATION_FILE=./logs/datasets/MassSpecGym/val/MassSpecGym_fps_selfies_threshold_0.2.tsv
 SAVE_NAME=msg-bart-base-selfies-pretrain-4M-ft
 PORT=8669
 SAVE_STEPS=400

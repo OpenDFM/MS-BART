@@ -253,11 +253,8 @@ to the artifacts you intend to use. The preprocessing examples write to
 `logs/datasets/`, while some training and evaluation scripts still reference
 the original release under `data/`.
 
-In particular, the MSG finetuning and alignment scripts currently select
-`data/MassSpecGym/{train,val}/MassSpecGym_fps_selfies_threshold_0.11.tsv`.
-The fingerprint generator does not currently produce threshold `0.11`.
-Choose the intended threshold and align preprocessing and training accordingly;
-renaming a TSV does not change the threshold used to generate its fingerprints.
+The MSG finetuning and alignment scripts use threshold `0.2` under
+`logs/datasets/MassSpecGym/`.
 The CANOPUS finetuning and alignment scripts use threshold `0.2` under
 `logs/datasets/CANOPUS/`.
 

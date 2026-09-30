@@ -6,6 +6,7 @@ from tqdm import tqdm
 from accelerate import PartialState
 from accelerate.utils import gather_object
 import argparse
+import json
 import numpy as np
 from rich.table import Table
 from rich.console import Console
@@ -115,9 +116,10 @@ if __name__ == "__main__":
             tip_completion_ids = tip_completion_ids.cpu()
             answers = [tokenizer.decode(x, skip_special_tokens=True).replace(" ", "") for x in tip_completion_ids]
 
-            if len(answers) > batch_size:  # Top-K generation
-                num_return_sequences = len(answers) // batch_size
-                answers = [answers[i * num_return_sequences:(i + 1) * num_return_sequences] for i in range(batch_size)]
+            answers = [
+                answers[j * args.num_beams:(j + 1) * args.num_beams]
+                for j in range(len(fps))
+            ]
 
             for st, sp, formula, sample_id in zip(selfies_true, answers, formulas, sample_ids):
                 selfies_formulas = []
@@ -160,6 +162,7 @@ if __name__ == "__main__":
         # Save first
         model_name = os.path.basename(model_path)
         save_path = os.path.join("logs", "results", model_name + ".jsonl")
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         # Save results
         save_predictions = []
         for i in range(len(all_labels)):
@@ -194,3 +197,12 @@ if __name__ == "__main__":
         topk_preds = [s[:k] if len(s) > k else s for s in all_preds]
         topk_results = topk_evaluator.evaluate_de_novo_step_selfies_top_k(topk_preds, all_labels)
         print("Topk results:", topk_results)
+
+        metrics_path = os.path.splitext(save_path)[0] + ".metrics.json"
+        with open(metrics_path, "w") as handle:
+            json.dump({
+                "config": vars(args),
+                "num_samples": len(all_labels),
+                "top1": top1_results,
+                "topk": topk_results,
+            }, handle, indent=2, allow_nan=False)

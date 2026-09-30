@@ -282,16 +282,16 @@ class RankLossSeq2SeqTrainer(Seq2SeqTrainer):
                 torch.where(batch["labels"] != -100, batch["labels"], self.processing_class.pad_token_id),
                 skip_special_tokens=True
             )
-            
+
+            # Gather before leaving the batch so Accelerate removes distributed padding.
+            pred_texts = self.accelerator.gather_for_metrics(pred_texts)
+            label_texts = self.accelerator.gather_for_metrics(label_texts)
             generated_outputs.extend([t.replace(" ", "") for t in pred_texts])
             labels.extend([t.replace(" ", "") for t in label_texts])
-        
-        all_outputs = self.accelerator.gather_for_metrics((generated_outputs))
-        all_labels = self.accelerator.gather_for_metrics((labels))
-        
+
         data_to_broadcast = [None]
         if is_main_process:
-            metrics = self.compute_metrics((all_outputs, all_labels))
+            metrics = self.compute_metrics((generated_outputs, labels))
             metrics = {f"{metric_key_prefix}_{k}": v for k, v in metrics.items()}
             data_to_broadcast[0] = metrics
         
@@ -300,4 +300,3 @@ class RankLossSeq2SeqTrainer(Seq2SeqTrainer):
         self.log(metrics)
         self.control = self.callback_handler.on_evaluate(self.args, self.state, self.control, metrics)
         return metrics
-    

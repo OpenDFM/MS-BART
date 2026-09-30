@@ -132,6 +132,14 @@ class DataTrainingArguments:
 class CustomTrainingArguments(Seq2SeqTrainingArguments):
     early_stopping_patience: int = field(default=3, metadata={"help": "Step patience for early stopping"})
 
+
+class MoleculeSeq2SeqTrainer(Seq2SeqTrainer):
+    def evaluation_loop(self, *args, **kwargs):
+        # One molecule is generated per input, so remove distributed padding.
+        self.gather_function = self.accelerator.gather_for_metrics
+        return super().evaluation_loop(*args, **kwargs)
+
+
 def main():
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, CustomTrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
@@ -311,7 +319,7 @@ def main():
 
         return result
     # Initialize our Trainer
-    trainer = Seq2SeqTrainer(
+    trainer = MoleculeSeq2SeqTrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,
